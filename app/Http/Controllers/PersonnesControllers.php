@@ -14,7 +14,10 @@ class PersonnesControllers extends Controller
         $date = [$date_debut,$date_fin];
 
 
-        $resultat = DB::table('rapport')->whereBetween('date_journe',$date)->get();
+        $resultat = DB::table('rapport')
+            ->leftJoin('entre_caisse','entre_caisse.code_entre','=','rapport.code_entre')
+            ->leftJoin('sortie_caisse','sortie_caisse.code_sortie','=','rapport.code_sortie')
+            ->whereBetween('date_journe',$date)->get();
 
         $valeur_entre = DB::table('entre_caisse')->whereBetween('date_entre_caisse',$date)
             ->sum('entre_caisse.montant_entre_caisse');
